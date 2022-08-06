@@ -1,20 +1,36 @@
 const express = require("express");
 const router = express.Router();
+const Mugger = require("./mugger")
 
 router.get("/muggers", (req, res) => {
-    res.send({methd: "GET"})
+    Mugger.find({})
+    .then(mugger => {
+        res.send(mugger);
+    })
 })
 
 router.post("/muggers", (req, res) => {
-    res.send({methd: "POST"})
+    Mugger.create(req.body)
+    .then(mugger => {
+        res.send(mugger);
+    });
 })
 
 router.put("/muggers/:id", (req, res) => {
-    res.send({methd: "PUT"})
+    Mugger.findByIdAndUpdate({_id: req.params.id}, req.body)
+    .then(() => {
+        Mugger.findOne({_id: req.params.id})
+        .then(mugger => {
+            res.send(mugger);
+        })
+    })
 })
 
 router.delete("/muggers/:id", (req, res) => {
-    res.send({methd: "DELETE"})
+    Mugger.deleteOne({_id: req.params.id})
+    .then(mugger => {
+        res.send(mugger);
+    })
 })
 
 module.exports = router;
